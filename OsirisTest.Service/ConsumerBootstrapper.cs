@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using OsirisTest.Hosting;
 using OsirisTest.Hosting.DataContracts;
 using OsirisTest.Service.Consumer.Consumers;
+using OsirisTest.Utilities.DataAccess.DataContracts;
+using OsirisTest.Utilities.DataAccess.Implementations;
 
 namespace OsirisTest.Service.Consumer
 {
@@ -18,6 +20,7 @@ namespace OsirisTest.Service.Consumer
             services.AddScoped<IBaseConsumer, CustomerConsumer>();
             
             services.AddScoped<IBaseConsumer, WagerConsumer>();
+            services.AddScoped<IConsumerAccessLayer, ConsumerAccessLayer>();
         }
 
         protected override void RegisterLogger(IServiceCollection services)

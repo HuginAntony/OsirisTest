@@ -25,7 +25,7 @@ namespace OsirisTest.Service.Consumer.Consumers.Base
         protected BaseConsumer(ILoggerFactory loggerFactory, IConfiguration configuration)
         {
             _Logger = loggerFactory.CreateLogger(ConsumerName);
-            _signalRUrl = configuration.GetValue<string>("url");
+            _signalRUrl = configuration.GetValue<string>("SignalRUrl");
         }
 
         public async Task Register(CancellationToken cancellationToken)
