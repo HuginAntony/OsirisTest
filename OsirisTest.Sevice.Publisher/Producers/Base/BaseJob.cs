@@ -25,7 +25,7 @@ namespace OsirisTest.Service.Publisher.Producers.Base
         {
             _Logger = loggerFactory.CreateLogger(ProducerJobName);
 
-            _signalRUrl = configuration.GetValue<string>("url");
+            _signalRUrl = configuration.GetValue<string>("SignalRUrl");
 
             Random = new Random();            
 
