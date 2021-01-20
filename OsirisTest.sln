@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OsirisTest.Contracts", "Osi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OsirisTest.Service.Publisher", "OsirisTest.Sevice.Publisher\OsirisTest.Service.Publisher.csproj", "{4BABB095-DB50-46DA-B9B8-33F2D7A1DB2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsirisTest.WebApi.BusinessLayer", "OsirisTest.WebApi.BusinessLayer\OsirisTest.WebApi.BusinessLayer.csproj", "{81659B0D-4177-437A-9824-A50059AC0A1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OsirisTest.WebApi.BusinessLayer", "OsirisTest.WebApi.BusinessLayer\OsirisTest.WebApi.BusinessLayer.csproj", "{81659B0D-4177-437A-9824-A50059AC0A1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsirisTest.Data", "OsirisTest.Data\OsirisTest.Data.csproj", "{C0FB9B98-DD8B-472D-AEE4-B033A74751D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{81659B0D-4177-437A-9824-A50059AC0A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81659B0D-4177-437A-9824-A50059AC0A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81659B0D-4177-437A-9824-A50059AC0A1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0FB9B98-DD8B-472D-AEE4-B033A74751D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0FB9B98-DD8B-472D-AEE4-B033A74751D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0FB9B98-DD8B-472D-AEE4-B033A74751D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0FB9B98-DD8B-472D-AEE4-B033A74751D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{4A58D9AE-EC3E-475B-AA90-EDA5467A8098} = {2B11404C-330A-4EA2-AB04-5920569771B2}
 		{4BABB095-DB50-46DA-B9B8-33F2D7A1DB2C} = {E7AB02E5-E480-48B5-916B-A9EC3AD6BE12}
 		{81659B0D-4177-437A-9824-A50059AC0A1E} = {2162596E-4271-4F24-83B3-D03C9E682E65}
+		{C0FB9B98-DD8B-472D-AEE4-B033A74751D7} = {2B11404C-330A-4EA2-AB04-5920569771B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7DF563ED-FA26-4F47-9594-379996932A54}
