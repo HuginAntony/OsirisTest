@@ -4,6 +4,6 @@ namespace OsirisTest.Hosting.DataContracts
 {
     public interface IApplicationProvider
     {
-        public void RunApplication() { };
+        void RunApplication();
     }
 }

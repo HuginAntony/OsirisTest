@@ -10,7 +10,7 @@ namespace OsirisTest.Hosting.Implementations
     public class BaseApplicationHost: IBaseApplicationHost
     {
         private readonly object _Lock = new object();
-        private readonly IList<IBaseConsumer> _BaseConsumers;
+        private IList<IBaseConsumer> _BaseConsumers;
 
         public BaseApplicationHost(IEnumerable<IBaseConsumer> consumers)
         {

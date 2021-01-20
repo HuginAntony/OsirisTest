@@ -27,5 +27,20 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
             //TODO: Implement database save function that will updated customer last wager date and amount
             throw new NotImplementedException("Implement database save function that will updated customer last wager date and amount");
         }
+
+        public Customer SaveOrUpdateCustomer(Customer customer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Wager SaveOrUpdateWager(Wager wager, bool isValid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateCustomerLastWager(CustomerLastWager lastWager)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

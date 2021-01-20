@@ -9,7 +9,8 @@ namespace OsirisTest.Service.Publisher.Producers
 {
     public class WagerProducer: BaseJob<Wager>
     {
-        public WagerProducer(ILoggerFactory loggerFactory, IConfiguration configuration) { }
+        public WagerProducer(ILoggerFactory loggerFactory, IConfiguration configuration) : base(loggerFactory, configuration)
+        { }
 
         protected override string ProducerJobName => nameof(WagerProducer);
 

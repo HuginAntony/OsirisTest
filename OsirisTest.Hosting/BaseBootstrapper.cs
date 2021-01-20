@@ -11,7 +11,7 @@ namespace OsirisTest.Hosting
         private bool _DisposedValue;
 
         private IServiceCollection _ServiceCollection;
-        private readonly IConfiguration _Configuration;
+        private IConfiguration _Configuration;
 
         protected BaseBootstrapper(IServiceCollection serviceCollection, string[] jsonConfigFileNames)
         {

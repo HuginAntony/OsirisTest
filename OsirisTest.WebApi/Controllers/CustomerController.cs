@@ -18,16 +18,16 @@ namespace OsirisTest.WebApi.Controllers
 
         [HttpGet]
         [Route("IsCustomerLocked")]
-        public Task<IActionResult> IsCustomerLocked(int customerId)
+        public async Task<IActionResult> IsCustomerLocked(int customerId)
         {
-            return await RequestHandler(() => await _CustomerManager.IsLockedCustomer(customerId));
+            return await RequestHandler(async () => await _CustomerManager.IsLockedCustomer(customerId));
         }
 
         [HttpGet]
         [Route("GetCustomer")]
-        public Task<IActionResult> GetCustomer(int customerId)
+        public async Task<IActionResult> GetCustomer(int customerId)
         {
-            return await RequestHandler(() => await _CustomerManager.GetCustomerById(customerId));
+            return await RequestHandler(async () => await _CustomerManager.GetCustomerById(customerId));
         }
     }
 }

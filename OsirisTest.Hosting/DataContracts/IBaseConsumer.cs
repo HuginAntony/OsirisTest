@@ -5,8 +5,8 @@ namespace OsirisTest.Hosting.DataContracts
 {
     public  interface IBaseConsumer
     {
-        public Task Register(CancellationToken cancellationToken) { };
+        Task Register(CancellationToken cancellationToken);
 
-        public void DeRegister() { };
+        void DeRegister();
     }
 }

@@ -20,9 +20,9 @@ namespace OsirisTest.WebApi.Controllers
 
         [HttpPost]
         [Route("SendReminderEmail")]
-        public Task<IActionResult> SendReminderEmail([FromBody][Required(ErrorMessage = "Invalid request.")] SendMailRequest request)
+        public async Task<IActionResult> SendReminderEmail([FromBody][Required(ErrorMessage = "Invalid request.")] SendMailRequest request)
         {
-            return await RequestHandler(() => await _CommunicationsManager.SendReminderEmail(request));
+            return await RequestHandler(async () => await _CommunicationsManager.SendReminderEmail(request));
         }
     }
 }

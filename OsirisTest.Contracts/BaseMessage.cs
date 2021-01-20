@@ -6,6 +6,6 @@ namespace OsirisTest.Contracts
     {
         public DateTime GeneratedDateTime { get; set; }
 
-        public T Message { get; }
+        public T Message { get; set; }
     }
 }

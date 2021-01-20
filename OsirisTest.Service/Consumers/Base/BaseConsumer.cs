@@ -66,7 +66,7 @@ namespace OsirisTest.Service.Consumer.Consumers.Base
             }
         }
 
-        protected void ProcessMessage(TMessage message);
+        protected abstract void ProcessMessage(TMessage message);
 
         public async void DeRegister()
         {

@@ -21,7 +21,7 @@ namespace OsirisTest.Service.Publisher.Producers.Base
             _Logger = loggerFactory.CreateLogger(_JobName);
         }
 
-        public Task Register(CancellationToken cancellationToken)
+        public async Task Register(CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
@@ -54,7 +54,7 @@ namespace OsirisTest.Service.Publisher.Producers.Base
             }, cancellationToken);
         }
 
-        public void DeRegister()
+        public async void DeRegister()
         {
             await Task.Run(JobManager.StopAndBlock);
         }

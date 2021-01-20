@@ -23,7 +23,7 @@ namespace OsirisTest.WebApi.Controllers.Base
                     return BadRequest(modelStateErrorMessage);
                 }
 
-                T response = await func();
+                T response = func();
 
                 if (response == null)
                 {

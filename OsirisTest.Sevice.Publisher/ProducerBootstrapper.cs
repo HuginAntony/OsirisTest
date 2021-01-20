@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using OsirisTest.Hosting;
 using OsirisTest.Hosting.DataContracts;
 using OsirisTest.Service.Publisher.Producers;
@@ -23,6 +24,7 @@ namespace OsirisTest.Service.Publisher
 
         protected override void RegisterLogger(IServiceCollection services)
         {
+            services.AddLogging(l => l.AddConsole());
         }
     }
 }
