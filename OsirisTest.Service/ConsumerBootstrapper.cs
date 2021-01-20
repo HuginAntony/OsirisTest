@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OsirisTest.Data;
 using OsirisTest.Hosting;
 using OsirisTest.Hosting.DataContracts;
 using OsirisTest.Service.Consumer.Consumers;
@@ -21,6 +23,14 @@ namespace OsirisTest.Service.Consumer
             
             services.AddScoped<IBaseConsumer, WagerConsumer>();
             services.AddScoped<IConsumerAccessLayer, ConsumerAccessLayer>();
+        }
+
+        protected override void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DBConnection");
+
+            services.AddDbContext<OsirisContext>(options =>
+                options.UseSqlServer(connectionString));
         }
 
         protected override void RegisterLogger(IServiceCollection services)

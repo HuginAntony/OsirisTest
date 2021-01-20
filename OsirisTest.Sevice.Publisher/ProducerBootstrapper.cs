@@ -22,6 +22,14 @@ namespace OsirisTest.Service.Publisher
             services.AddScoped<IBaseConsumer, BaseProducer<WagerProducer>>();
         }
 
+        protected override void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
+        {
+            //var connectionString = configuration.GetConnectionString("DBConnection");
+
+            //services.AddDbContext<OsirisContext>(options =>
+            //    options.UseSqlServer(connectionString));
+        }
+
         protected override void RegisterLogger(IServiceCollection services)
         {
             services.AddLogging(l => l.AddConsole());

@@ -22,6 +22,7 @@ namespace OsirisTest.Hosting
         private void Register()
         {
             ConfigureServices(_ServiceCollection, _Configuration);
+            ConfigureDatabase(_ServiceCollection, _Configuration);
 
             RegisterLogger(_ServiceCollection);
 
@@ -31,6 +32,8 @@ namespace OsirisTest.Hosting
         protected abstract void ConfigureServices(IServiceCollection services, IConfiguration configuration);
 
         protected abstract void RegisterLogger(IServiceCollection services);
+
+        protected abstract void ConfigureDatabase(IServiceCollection services, IConfiguration configuration);
 
         private void RegisterInternal()
         {

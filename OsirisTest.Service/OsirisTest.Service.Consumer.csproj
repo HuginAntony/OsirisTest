@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OsirisTest.Contracts\OsirisTest.Contracts.csproj" />
+    <ProjectReference Include="..\OsirisTest.Data\OsirisTest.Data.csproj" />
     <ProjectReference Include="..\OsirisTest.Hosting\OsirisTest.Hosting.csproj" />
     <ProjectReference Include="..\OsirisTest.Utilities\OsirisTest.Utilities.csproj" />
   </ItemGroup>
