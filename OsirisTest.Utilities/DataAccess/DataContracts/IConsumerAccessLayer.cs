@@ -7,10 +7,7 @@ namespace OsirisTest.Utilities.DataAccess.DataContracts
     {
         Task<Customer> SaveOrUpdateCustomer(Customer customer);
         Task<bool> IsValidCustomer(int customerId);
-
         Task<Wager> SaveOrUpdateWager(Wager wager, bool isValid);
-
         void UpdateCustomerLastWager(CustomerLastWager lastWager);
     }
-
 }

@@ -7,10 +7,10 @@ namespace OsirisTest.WebApi.BusinessLayer.Implementations
 {
     public class CommunicationsManager : ICommunicationsManager
     {
-        public Task<Response> SendReminderEmail(SendMailRequest sendMailRequest)
+        public Task<bool> SendReminderEmail(SendMailRequest sendMailRequest)
         {
             //DO NOTHING
-            return Task.FromResult(new Response{Result = true});
+            return Task.FromResult(true);
         }
     }
 }

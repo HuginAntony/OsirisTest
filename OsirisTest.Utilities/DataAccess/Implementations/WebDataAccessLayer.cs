@@ -8,19 +8,14 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
 {
     public class WebDataAccessLayer : IWebDataAccessLayer
     {
-        /************************************************************************************************/
-        //In the ideal world this would access the database to query the result
-        //There is no need to do anything in this case, you may leave as is or update if you wish
-        /************************************************************************************************/
-        //Ignore declaration
         private static readonly List<int> LockedCustomers = new List<int>
         {
             1,7,16,21,28,29,36,48,49,56,70,88,91,92,99
         };
 
-        public Task<Response> IsLockedCustomer(int customerId)
+        public Task<bool> IsLockedCustomer(int customerId)
         {
-            return Task.FromResult(new Response{ Result = LockedCustomers.Contains(customerId) });
+            return Task.FromResult(LockedCustomers.Contains(customerId));
         }
 
         public Task<CustomerResponse> GetCustomerById(int customerId)

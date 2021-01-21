@@ -15,8 +15,8 @@ namespace OsirisTest.Service.Consumer.Consumers.Base
     {
         private HubConnection _Connection;
 
-        protected readonly ILogger _Logger;
-        private readonly string _signalRUrl;
+        protected readonly ILogger Logger;
+        private readonly string _SignalRUrl;
 
 
         protected abstract string SignalRChannelName { get; }
@@ -24,8 +24,8 @@ namespace OsirisTest.Service.Consumer.Consumers.Base
 
         protected BaseConsumer(ILoggerFactory loggerFactory, IConfiguration configuration)
         {
-            _Logger = loggerFactory.CreateLogger(ConsumerName);
-            _signalRUrl = configuration.GetValue<string>("SignalRUrl");
+            Logger = loggerFactory.CreateLogger(ConsumerName);
+            _SignalRUrl = configuration.GetValue<string>("SignalRUrl");
         }
 
         public async Task Register(CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace OsirisTest.Service.Consumer.Consumers.Base
             try
             {
                 _Connection = new HubConnectionBuilder()
-                    .WithUrl(_signalRUrl)
+                    .WithUrl(_SignalRUrl)
                     .WithAutomaticReconnect()
                     .Build();
 
@@ -43,11 +43,11 @@ namespace OsirisTest.Service.Consumer.Consumers.Base
             }
             catch (OperationCanceledException canEx)
             {
-                _Logger.LogWarning($"Consumer {ConsumerName} has been cancelled.\r\n{canEx.Message}", canEx);
+                Logger.LogWarning($"Consumer {ConsumerName} has been cancelled.\r\n{canEx.Message}", canEx);
             }
             catch (Exception ex)
             {
-                _Logger.LogCritical($"Consumer {ConsumerName} failed to register.\r\n{ex.Message}", ex);
+                Logger.LogCritical($"Consumer {ConsumerName} failed to register.\r\n{ex.Message}", ex);
                 throw;
             }
         }
@@ -58,11 +58,11 @@ namespace OsirisTest.Service.Consumer.Consumers.Base
             {
                 ProcessMessage(message);
 
-                _Logger.LogInformation($"{ConsumerName} -> {JsonConvert.SerializeObject(message, Formatting.Indented)}\r\n");
+                Logger.LogInformation($"{ConsumerName} -> {JsonConvert.SerializeObject(message, Formatting.Indented)}\r\n");
             }
             catch (Exception ex)
             {
-                _Logger.LogError($"Unexpected error while processing message.\r\nConsumer: {ConsumerName}.\r\n{ex.Message}", ex);
+                Logger.LogError($"Unexpected error while processing message.\r\nConsumer: {ConsumerName}.\r\n{ex.Message}", ex);
             }
         }
 

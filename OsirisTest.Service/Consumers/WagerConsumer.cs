@@ -1,6 +1,4 @@
 ﻿using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
@@ -17,16 +15,16 @@ namespace OsirisTest.Service.Consumer.Consumers
 {
     public class WagerConsumer : BaseConsumer<BaseMessage<Wager>>
     {
-        private IConsumerAccessLayer _consumerAccessLayer;
-        private readonly IHttpClient _httpClient;
+        private readonly IConsumerAccessLayer _ConsumerAccessLayer;
+        private readonly IHttpClient _HttpClient;
         private readonly IMapper _Mapper;
 
         public WagerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer consumerAccessLayer, IConfiguration configuration, 
             IHttpClient httpClient, IMapper mapper) 
             : base(loggerFactory, configuration)
         {
-            _consumerAccessLayer = consumerAccessLayer;
-            _httpClient = httpClient;
+            _ConsumerAccessLayer = consumerAccessLayer;
+            _HttpClient = httpClient;
             _Mapper = mapper;
         }
 
@@ -38,17 +36,17 @@ namespace OsirisTest.Service.Consumer.Consumers
         {
             //TODO: Ensure that you do not simultaneously process the same wager (This should not be the case with the WagerId being a random Guid but do cater for it either way)
 
-            var isValidCustomer = await _consumerAccessLayer.IsValidCustomer(message.Message.CustomerId);
+            var isValidCustomer = await _ConsumerAccessLayer.IsValidCustomer(message.Message.CustomerId);
 
             if (!isValidCustomer)
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/Customer/GetCustomer/{message.Message.CustomerId}");
 
-                var customerResponse = await _httpClient.Get<CustomerResponse>(request);
-                var customer = await _consumerAccessLayer.SaveOrUpdateCustomer(_Mapper.Map<Customer>(customerResponse));
+                var customerResponse = await _HttpClient.Get<CustomerResponse>(request);
+                var customer = await _ConsumerAccessLayer.SaveOrUpdateCustomer(_Mapper.Map<Customer>(customerResponse));
             }
 
-            var wager = await _consumerAccessLayer.SaveOrUpdateWager(message.Message, message.Message.IsValidWager());
+            var wager = await _ConsumerAccessLayer.SaveOrUpdateWager(message.Message, message.Message.IsValidWager());
 
             await UpdateLastWager(message, wager);
         }
@@ -57,9 +55,7 @@ namespace OsirisTest.Service.Consumer.Consumers
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/Customer/IsCustomerLocked/{wager.CustomerId}");
 
-            var response = await _httpClient.Get<Response>(request);
-
-            bool isCustomerLocked = response.Result;
+            var isCustomerLocked = await _HttpClient.Get<bool>(request);
 
             if (message.Message.IsValidWager() && !isCustomerLocked)
             {
@@ -70,7 +66,7 @@ namespace OsirisTest.Service.Consumer.Consumers
                     LastWagerDateTime = wager.WagerDateTime
                 };
 
-                _consumerAccessLayer.UpdateCustomerLastWager(lastWager);
+                _ConsumerAccessLayer.UpdateCustomerLastWager(lastWager);
             }
         }
     }

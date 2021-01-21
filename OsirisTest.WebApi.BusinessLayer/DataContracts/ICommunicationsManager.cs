@@ -6,6 +6,6 @@ namespace OsirisTest.WebApi.BusinessLayer.DataContracts
 {
     public interface ICommunicationsManager
     {
-        Task<Response> SendReminderEmail(SendMailRequest sendMailRequest);
+        Task<bool> SendReminderEmail(SendMailRequest sendMailRequest);
     }
 }

@@ -17,14 +17,14 @@ namespace OsirisTest.Service.Consumer.Consumers
 {
     public class CustomerConsumer : BaseConsumer<BaseMessage<Customer>>
     {
-        private readonly IConsumerAccessLayer _consumerAccessLayer;
-        private readonly IHttpClient _httpClient;
+        private readonly IConsumerAccessLayer _ConsumerAccessLayer;
+        private readonly IHttpClient _HttpClient;
 
         public CustomerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer consumerAccessLayer, IConfiguration configuration, IHttpClient httpClient) 
             : base(loggerFactory, configuration)
         {
-            _consumerAccessLayer = consumerAccessLayer;
-            _httpClient = httpClient;
+            _ConsumerAccessLayer = consumerAccessLayer;
+            _HttpClient = httpClient;
         }
 
         protected override string SignalRChannelName => "ReceiveCustomerMessage";
@@ -35,7 +35,7 @@ namespace OsirisTest.Service.Consumer.Consumers
         {
             //TODO: Ensure that you do not simultaneously process the same customer
 
-            var customer = await _consumerAccessLayer.SaveOrUpdateCustomer(message.Message);
+            var customer = await _ConsumerAccessLayer.SaveOrUpdateCustomer(message.Message);
 
             await SendEmail(message, customer);
         }
@@ -58,7 +58,7 @@ namespace OsirisTest.Service.Consumer.Consumers
                 request.Content = new StringContent(JsonSerializer.Serialize(body));
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var response = await _httpClient.Post<string>(request);
+                var response = await _HttpClient.Post<string>(request);
             }
         }
     }

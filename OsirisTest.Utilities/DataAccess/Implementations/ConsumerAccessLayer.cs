@@ -19,17 +19,13 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
         {
             _Mapper = mapper;
         }
-        /*******************************************************************************************************************/
-        // You are free to use any ORM you feel comfortable with for database manipulation
-        // You may update the request models and data access interfaces as you wish in order to achieve your end goal
-        /******************************************************************************************************************/
 
         public async Task<Customer> SaveOrUpdateCustomer(Customer customer)
         {
             var db = new OsirisContext();
 
             var currentCustomer = await db.Customers.FirstOrDefaultAsync(c => c.CustomerId == customer.CustomerId);
-
+            
             if (currentCustomer != null)
             {
                 if (customer.LastUpdateDateTime > currentCustomer.LastUpdateDateTime)

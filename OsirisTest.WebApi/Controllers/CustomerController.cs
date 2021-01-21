@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using OsirisTest.Contracts.ResponseModels;
 using OsirisTest.WebApi.BusinessLayer.DataContracts;
 using OsirisTest.WebApi.Controllers.Base;
 

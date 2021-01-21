@@ -12,8 +12,8 @@ namespace OsirisTest.Service.Publisher.Producers.Base
     {
         private HubConnection _Connection;
 
-        protected readonly ILogger _Logger;
-        private readonly string _signalRUrl;
+        protected readonly ILogger Logger;
+        private readonly string _SignalRUrl;
 
         protected Random Random { get; }
         
@@ -23,9 +23,9 @@ namespace OsirisTest.Service.Publisher.Producers.Base
 
         public BaseJob(ILoggerFactory loggerFactory, IConfiguration configuration)
         {
-            _Logger = loggerFactory.CreateLogger(ProducerJobName);
+            Logger = loggerFactory.CreateLogger(ProducerJobName);
 
-            _signalRUrl = configuration.GetValue<string>("SignalRUrl");
+            _SignalRUrl = configuration.GetValue<string>("SignalRUrl");
 
             Random = new Random();            
 
@@ -37,17 +37,17 @@ namespace OsirisTest.Service.Publisher.Producers.Base
             try
             {
                 _Connection = new HubConnectionBuilder()
-                    .WithUrl(_signalRUrl)
+                    .WithUrl(_SignalRUrl)
                     .WithAutomaticReconnect()
                     .Build();
 
                 _Connection.StartAsync();
 
-                _Logger.LogInformation($"{SignalRChannelName} initialized for {SignalRChannelName}.");
+                Logger.LogInformation($"{SignalRChannelName} initialized for {SignalRChannelName}.");
             }
             catch (Exception ex)
             {
-                _Logger.LogCritical($"Error when connection to R hub for {SignalRChannelName} from {SignalRChannelName}.\r\n{ex.Message}", ex);
+                Logger.LogCritical($"Error when connection to R hub for {SignalRChannelName} from {SignalRChannelName}.\r\n{ex.Message}", ex);
                 throw;
             }
 
@@ -66,11 +66,11 @@ namespace OsirisTest.Service.Publisher.Producers.Base
                         Message = message
                     });
 
-                _Logger.LogInformation($"{SignalRChannelName} -> {JsonConvert.SerializeObject(message, Formatting.Indented)}\r\n");
+                Logger.LogInformation($"{SignalRChannelName} -> {JsonConvert.SerializeObject(message, Formatting.Indented)}\r\n");
             }
             catch (Exception ex)
             {
-                _Logger.LogError($"Error when publishing message to {SignalRChannelName} from {ProducerJobName}.\r\n{ex.Message}", ex);
+                Logger.LogError($"Error when publishing message to {SignalRChannelName} from {ProducerJobName}.\r\n{ex.Message}", ex);
             }
         }
 

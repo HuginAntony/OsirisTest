@@ -24,3 +24,14 @@ CREATE TABLE dbo.Wager
 	CONSTRAINT PK_Wager_WagerId PRIMARY KEY(WagerId),
 	CONSTRAINT FK_Wager_CustomerId FOREIGN KEY(CustomerId) REFERENCES dbo.Customer(CustomerId)
 )
+
+  CREATE VIEW WagerReport AS
+  SELECT C.FirstName + ' ' + C.LastName AS 'CustomerName', W.CustomerId,
+		CASE W.IsValid 
+			WHEN 0 THEN 'Invalid'
+			WHEN 1 THEN 'Valid'
+		END AS Status, 
+		COUNT(*) AS 'No. Of Wagers', SUM(W.Amount) AS 'Total Amount'
+  FROM dbo.Wager W
+   INNER JOIN Customer C ON C.CustomerId = W.CustomerId
+  GROUP BY C.FirstName, C.LastName, W.CustomerId, IsValid

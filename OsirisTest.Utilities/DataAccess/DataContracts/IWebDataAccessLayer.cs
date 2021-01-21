@@ -5,9 +5,7 @@ namespace OsirisTest.Utilities.DataAccess.DataContracts
 {
     public interface IWebDataAccessLayer
     {
-        Task<Response> IsLockedCustomer(int customerId);
-
+        Task<bool> IsLockedCustomer(int customerId);
         Task<CustomerResponse> GetCustomerById(int customerId);
     }
-
 }
