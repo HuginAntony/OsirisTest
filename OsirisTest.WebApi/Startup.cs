@@ -28,6 +28,8 @@ namespace OsirisTest.WebApi
             services.AddSignalR();
 
             services.AddSingleton<ICommunicationsManager, CommunicationsManager>();
+            services.AddScoped<ICustomerManager, CustomerManager>();
+            services.AddScoped<IWebDataAccessLayer, WebDataAccessLayer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

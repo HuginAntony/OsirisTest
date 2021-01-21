@@ -4,16 +4,17 @@ using OsirisTest.Contracts;
 using OsirisTest.Service.Consumer.Consumers.Base;
 using OsirisTest.Utilities.DataAccess.DataContracts;
 using OsirisTest.Utilities.DataAccess.Models;
+using OsirisTest.Utilities.Extensions;
 
 namespace OsirisTest.Service.Consumer.Consumers
 {
     public class WagerConsumer : BaseConsumer<BaseMessage<Wager>>
     {
-        private IConsumerAccessLayer _DateAccessLayer;
-        public WagerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer dateAccessLayer, IConfiguration configuration) 
+        private IConsumerAccessLayer _consumerAccessLayer;
+        public WagerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer consumerAccessLayer, IConfiguration configuration) 
             : base(loggerFactory, configuration)
         {
-            _DateAccessLayer = dateAccessLayer;
+            _consumerAccessLayer = consumerAccessLayer;
         }
 
         protected override string SignalRChannelName => "ReceiveWagerMessage";
@@ -24,7 +25,7 @@ namespace OsirisTest.Service.Consumer.Consumers
         {
             //TODO: Ensure that you do not simultaneously process the same wager (This should not be the case with the WagerId being a random Guid but do cater for it either way)
 
-            //TODO: Save or update the wager to database, use the provided extension to get the Validity of the wager (ContractExtensions.IsValidWager)
+            var wager = _consumerAccessLayer.SaveOrUpdateWager(message.Message, message.Message.IsValidWager());
 
             //TODO: If customer does not exist on the local data store then request customer from 3rd party API and update the customer record locally (http://localhost:53395/v1/Customer/GetCustomer)
 

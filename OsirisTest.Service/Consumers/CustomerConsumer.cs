@@ -10,11 +10,11 @@ namespace OsirisTest.Service.Consumer.Consumers
 {
     public class CustomerConsumer : BaseConsumer<BaseMessage<Customer>>
     {
-        private IConsumerAccessLayer _DateAccessLayer;
-        public CustomerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer dateAccessLayer, IConfiguration configuration) 
+        private readonly IConsumerAccessLayer _consumerAccessLayer;
+        public CustomerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer consumerAccessLayer, IConfiguration configuration) 
             : base(loggerFactory, configuration)
         {
-            _DateAccessLayer = dateAccessLayer;
+            _consumerAccessLayer = consumerAccessLayer;
         }
 
         protected override string SignalRChannelName => "ReceiveCustomerMessage";
@@ -26,6 +26,7 @@ namespace OsirisTest.Service.Consumer.Consumers
             //TODO: Ensure that you do not simultaneously process the same customer
 
             //TODO: Save or update the customer to database, make sure to only update the latest record by checking the LastUpdateDateTime
+            var customer = _consumerAccessLayer.SaveOrUpdateCustomer(message.Message);
 
             //TODO: Send customer communications using "http://localhost:53395/v1/Communications/SendReminderEmail" if customer's last wager is older than 3 days.
             //CUSTOMER SHOULD NOT RECEIVE MORE THAN ONE MAIL EVERY 24 HOURS
