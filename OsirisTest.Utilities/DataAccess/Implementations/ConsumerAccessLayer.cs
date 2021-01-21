@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OsirisTest.Data;
 using OsirisTest.Utilities.DataAccess.DataContracts;
 using OsirisTest.Utilities.DataAccess.Models;
@@ -9,14 +11,12 @@ using Wager = OsirisTest.Utilities.DataAccess.Models.Wager;
 
 namespace OsirisTest.Utilities.DataAccess.Implementations
 {
-    public class ConsumerAccessLayer: IConsumerAccessLayer
+    public class ConsumerAccessLayer : IConsumerAccessLayer
     {
-        private readonly OsirisContext _Db;
         private readonly IMapper _Mapper;
 
-        public ConsumerAccessLayer(OsirisContext db, IMapper mapper)
+        public ConsumerAccessLayer(IMapper mapper)
         {
-            _Db = db;
             _Mapper = mapper;
         }
         /*******************************************************************************************************************/
@@ -24,23 +24,25 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
         // You may update the request models and data access interfaces as you wish in order to achieve your end goal
         /******************************************************************************************************************/
 
-        public Customer SaveOrUpdateCustomer(Customer customer)
+        public async Task<Customer> SaveOrUpdateCustomer(Customer customer)
         {
-            var currentCustomer = _Db.Customers.FirstOrDefault(c => c.CustomerId == customer.CustomerId);
+            var db = new OsirisContext();
+
+            var currentCustomer = await db.Customers.FirstOrDefaultAsync(c => c.CustomerId == customer.CustomerId);
 
             if (currentCustomer != null)
             {
                 if (customer.LastUpdateDateTime > currentCustomer.LastUpdateDateTime)
                 {
-                    _Mapper.Map(customer,currentCustomer);
+                    _Mapper.Map(customer, currentCustomer);
 
                     if (currentCustomer.LastWagerDateTime == DateTime.MinValue)
                     {
                         currentCustomer.LastWagerDateTime = null;
                     }
 
-                    _Db.Customers.Update(currentCustomer);
-                    _Db.SaveChanges();
+                    db.Customers.Update(currentCustomer);
+                    await db.SaveChangesAsync();
                 }
             }
             else
@@ -56,53 +58,61 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
                     currentCustomer.LastWagerDateTime = null;
                 }
 
-                _Db.Customers.Add(currentCustomer);
-                _Db.SaveChanges();
+                await db.Customers.AddAsync(currentCustomer);
+                await db.SaveChangesAsync();
             }
             return customer;
         }
 
-        public bool IsValidCustomer(int customerId)
+        public async Task<bool> IsValidCustomer(int customerId)
         {
-            var isValidCustomer = _Db.Customers.Count(c => c.CustomerId == customerId) > 0;
+            var _Db = new OsirisContext();
+
+            var isValidCustomer = await _Db.Customers.CountAsync(c => c.CustomerId == customerId) > 0;
 
             return isValidCustomer;
         }
 
-        public Wager SaveOrUpdateWager(Wager wager, bool isValid)
+        public async Task<Wager> SaveOrUpdateWager(Wager wager, bool isValid)
         {
-            var currentWager = _Db.Wagers.FirstOrDefault(c => c.WagerId == wager.WagerId);
+            var db = new OsirisContext();
+
+            var currentWager = await db.Wagers.FirstOrDefaultAsync(c => c.WagerId == wager.WagerId);
 
             if (currentWager != null)
             {
                 _Mapper.Map(wager, currentWager);
-                _Db.Wagers.Update(currentWager);
-                    _Db.SaveChanges();
-                
+                currentWager.IsValid = isValid;
+
+                db.Wagers.Update(currentWager);
+                await db.SaveChangesAsync();
             }
             else
             {
                 currentWager = new Data.Wager();
                 _Mapper.Map(wager, currentWager);
-                
+
+                currentWager.IsValid = isValid;
                 currentWager.InsertedDateTime = DateTime.Now;
 
-                _Db.Wagers.Add(currentWager);
-                _Db.SaveChanges();
+                await db.Wagers.AddAsync(currentWager);
+                await db.SaveChangesAsync();
             }
-         
+
             return wager;
         }
 
-        public void UpdateCustomerLastWager(CustomerLastWager lastWager)
+        public async void UpdateCustomerLastWager(CustomerLastWager lastWager)
         {
-            var customer = _Db.Customers.FirstOrDefault(c => c.CustomerId == lastWager.CustomerId);
+            var db = new OsirisContext();
+
+            var customer = await db.Customers.FirstOrDefaultAsync(c => c.CustomerId == lastWager.CustomerId);
 
             if (customer != null)
             {
                 customer.LastWagerAmount = lastWager.LastWagerAmount;
                 customer.LastWagerDateTime = lastWager.LastWagerDateTime;
-                _Db.SaveChanges();
+                await db.SaveChangesAsync();
             }
         }
     }

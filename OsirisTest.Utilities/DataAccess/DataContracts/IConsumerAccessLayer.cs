@@ -1,13 +1,14 @@
-﻿using OsirisTest.Utilities.DataAccess.Models;
+﻿using System.Threading.Tasks;
+using OsirisTest.Utilities.DataAccess.Models;
 
 namespace OsirisTest.Utilities.DataAccess.DataContracts
 {
     public interface IConsumerAccessLayer
     {
-        Customer SaveOrUpdateCustomer(Customer customer);
-        bool IsValidCustomer(int customerId);
+        Task<Customer> SaveOrUpdateCustomer(Customer customer);
+        Task<bool> IsValidCustomer(int customerId);
 
-        Wager SaveOrUpdateWager(Wager wager, bool isValid);
+        Task<Wager> SaveOrUpdateWager(Wager wager, bool isValid);
 
         void UpdateCustomerLastWager(CustomerLastWager lastWager);
     }

@@ -35,7 +35,7 @@ namespace OsirisTest.Service.Consumer.Consumers
         {
             //TODO: Ensure that you do not simultaneously process the same customer
 
-            var customer = _consumerAccessLayer.SaveOrUpdateCustomer(message.Message);
+            var customer = await _consumerAccessLayer.SaveOrUpdateCustomer(message.Message);
 
             await SendEmail(message, customer);
         }

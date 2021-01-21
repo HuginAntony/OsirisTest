@@ -38,15 +38,17 @@ namespace OsirisTest.Service.Consumer.Consumers
         {
             //TODO: Ensure that you do not simultaneously process the same wager (This should not be the case with the WagerId being a random Guid but do cater for it either way)
 
-            if (!_consumerAccessLayer.IsValidCustomer(message.Message.CustomerId))
+            var isValidCustomer = await _consumerAccessLayer.IsValidCustomer(message.Message.CustomerId);
+
+            if (!isValidCustomer)
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/Customer/GetCustomer/{message.Message.CustomerId}");
 
                 var customerResponse = await _httpClient.Get<CustomerResponse>(request);
-                var customer = _consumerAccessLayer.SaveOrUpdateCustomer(_Mapper.Map<Customer>(customerResponse));
+                var customer = await _consumerAccessLayer.SaveOrUpdateCustomer(_Mapper.Map<Customer>(customerResponse));
             }
 
-            var wager = _consumerAccessLayer.SaveOrUpdateWager(message.Message, message.Message.IsValidWager());
+            var wager = await _consumerAccessLayer.SaveOrUpdateWager(message.Message, message.Message.IsValidWager());
 
             await UpdateLastWager(message, wager);
         }
