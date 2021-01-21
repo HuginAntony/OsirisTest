@@ -12,14 +12,14 @@ namespace OsirisTest.WebApi.BusinessLayer.Implementations
         {
             _WebDataAccessLayer = webAccessLayer;
         }
-        public async Task<Response> IsLockedCustomer(int customerId)
+        public Task<Response> IsLockedCustomer(int customerId)
         {
-            return await _WebDataAccessLayer.IsLockedCustomer(customerId);
+            return _WebDataAccessLayer.IsLockedCustomer(customerId);
         }
 
-        public async Task<CustomerResponse> GetCustomerById(int customerId)
+        public Task<CustomerResponse> GetCustomerById(int customerId)
         {
-            return await _WebDataAccessLayer.GetCustomerById(customerId);
+            return _WebDataAccessLayer.GetCustomerById(customerId);
         }
     }
 }

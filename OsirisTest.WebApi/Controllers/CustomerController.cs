@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OsirisTest.Contracts.ResponseModels;
 using OsirisTest.WebApi.BusinessLayer.DataContracts;
 using OsirisTest.WebApi.Controllers.Base;
 
@@ -20,14 +21,16 @@ namespace OsirisTest.WebApi.Controllers
         [Route("IsCustomerLocked/{customerId}")]
         public async Task<IActionResult> IsCustomerLocked(int customerId)
         {
-            return await RequestHandler(async () => await _CustomerManager.IsLockedCustomer(customerId));
+            var response = await _CustomerManager.IsLockedCustomer(customerId);
+            return await RequestHandler(() => response);
         }
 
         [HttpGet]
         [Route("GetCustomer/{customerId}")]
         public async Task<IActionResult> GetCustomer(int customerId)
         {
-            return await RequestHandler(async () => await _CustomerManager.GetCustomerById(customerId));
-        }
+            var response = await _CustomerManager.GetCustomerById(customerId);
+            return await RequestHandler(() => response);
+        } 
     }
 }

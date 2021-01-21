@@ -71,8 +71,26 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
 
         public Wager SaveOrUpdateWager(Wager wager, bool isValid)
         {
-            _Db.Wagers.Add(new Data.Wager());
-            _Db.SaveChanges();
+            var currentWager = _Db.Wagers.FirstOrDefault(c => c.WagerId == wager.WagerId);
+
+            if (currentWager != null)
+            {
+                _Mapper.Map(wager, currentWager);
+                _Db.Wagers.Update(currentWager);
+                    _Db.SaveChanges();
+                
+            }
+            else
+            {
+                currentWager = new Data.Wager();
+                _Mapper.Map(wager, currentWager);
+                
+                currentWager.InsertedDateTime = DateTime.Now;
+
+                _Db.Wagers.Add(currentWager);
+                _Db.SaveChanges();
+            }
+         
             return wager;
         }
 

@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OsirisTest.Contracts;
@@ -18,12 +19,15 @@ namespace OsirisTest.Service.Consumer.Consumers
     {
         private IConsumerAccessLayer _consumerAccessLayer;
         private readonly IHttpClient _httpClient;
+        private readonly IMapper _Mapper;
 
-        public WagerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer consumerAccessLayer, IConfiguration configuration, IHttpClient httpClient) 
+        public WagerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer consumerAccessLayer, IConfiguration configuration, 
+            IHttpClient httpClient, IMapper mapper) 
             : base(loggerFactory, configuration)
         {
             _consumerAccessLayer = consumerAccessLayer;
             _httpClient = httpClient;
+            _Mapper = mapper;
         }
 
         protected override string SignalRChannelName => "ReceiveWagerMessage";
@@ -38,8 +42,8 @@ namespace OsirisTest.Service.Consumer.Consumers
             {
                 var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/Customer/GetCustomer/{message.Message.CustomerId}");
 
-                var customerResponse = await _httpClient.Get<Customer>(request);
-                var customer = _consumerAccessLayer.SaveOrUpdateCustomer(customerResponse);
+                var customerResponse = await _httpClient.Get<CustomerResponse>(request);
+                var customer = _consumerAccessLayer.SaveOrUpdateCustomer(_Mapper.Map<Customer>(customerResponse));
             }
 
             var wager = _consumerAccessLayer.SaveOrUpdateWager(message.Message, message.Message.IsValidWager());
@@ -49,7 +53,7 @@ namespace OsirisTest.Service.Consumer.Consumers
 
         private async Task UpdateLastWager(BaseMessage<Wager> message, Wager wager)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v1/Customer/IsCustomerLocked");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/v1/Customer/IsCustomerLocked/{wager.CustomerId}");
 
             var response = await _httpClient.Get<Response>(request);
 
