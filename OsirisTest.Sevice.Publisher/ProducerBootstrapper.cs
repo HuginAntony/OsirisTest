@@ -17,9 +17,11 @@ namespace OsirisTest.Service.Publisher
 
         protected override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<CustomerProducer>();
             services.AddSingleton<WagerProducer>();
 
             services.AddScoped<IBaseConsumer, BaseProducer<WagerProducer>>();
+            services.AddScoped<IBaseConsumer, BaseProducer<CustomerProducer>>();
         }
 
         protected override void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
