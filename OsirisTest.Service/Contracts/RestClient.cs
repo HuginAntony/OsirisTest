@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace OsirisTest.Service.Consumer.Contracts
 {
@@ -33,8 +33,8 @@ namespace OsirisTest.Service.Consumer.Contracts
                 return default;
             }
 
-            var stream = await response.Content.ReadAsStreamAsync();
-            var result = await JsonSerializer.DeserializeAsync<T>(stream);
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<T>(json);
 
             return result;
         }
@@ -49,8 +49,8 @@ namespace OsirisTest.Service.Consumer.Contracts
                 throw new HttpRequestException(error);
             }
 
-            var stream = await response.Content.ReadAsStreamAsync();
-            var result = await JsonSerializer.DeserializeAsync<T>(stream);
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<T>(json);
 
             return result;
         }
