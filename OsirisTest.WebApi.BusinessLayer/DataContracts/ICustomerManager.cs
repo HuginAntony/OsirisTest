@@ -5,7 +5,7 @@ namespace OsirisTest.WebApi.BusinessLayer.DataContracts
 {
     public interface ICustomerManager
     {
-        Task<bool> IsLockedCustomer(int customerId);
+        Task<Response> IsLockedCustomer(int customerId);
 
         Task<CustomerResponse> GetCustomerById(int customerId);
     }

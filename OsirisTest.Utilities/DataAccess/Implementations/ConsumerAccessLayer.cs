@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AutoMapper;
 using OsirisTest.Data;
 using OsirisTest.Utilities.DataAccess.DataContracts;
 using OsirisTest.Utilities.DataAccess.Models;
@@ -10,10 +11,13 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
 {
     public class ConsumerAccessLayer: IConsumerAccessLayer
     {
-        private OsirisContext _db;
-        public ConsumerAccessLayer(OsirisContext db)
+        private readonly OsirisContext _Db;
+        private readonly IMapper _Mapper;
+
+        public ConsumerAccessLayer(OsirisContext db, IMapper mapper)
         {
-            _db = db;
+            _Db = db;
+            _Mapper = mapper;
         }
         /*******************************************************************************************************************/
         // You are free to use any ORM you feel comfortable with for database manipulation
@@ -22,27 +26,65 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
 
         public Customer SaveOrUpdateCustomer(Customer customer)
         {
-            _db.Customers.Add(new Data.Customer());
-            _db.SaveChanges();
+            var currentCustomer = _Db.Customers.FirstOrDefault(c => c.CustomerId == customer.CustomerId);
+
+            if (currentCustomer != null)
+            {
+                if (customer.LastUpdateDateTime > currentCustomer.LastUpdateDateTime)
+                {
+                    _Mapper.Map(customer,currentCustomer);
+
+                    if (currentCustomer.LastWagerDateTime == DateTime.MinValue)
+                    {
+                        currentCustomer.LastWagerDateTime = null;
+                    }
+
+                    _Db.Customers.Update(currentCustomer);
+                    _Db.SaveChanges();
+                }
+            }
+            else
+            {
+                currentCustomer = new Data.Customer();
+
+                _Mapper.Map(customer, currentCustomer);
+
+                currentCustomer.InsertedDateTime = DateTime.Now;
+
+                if (currentCustomer.LastWagerDateTime == DateTime.MinValue)
+                {
+                    currentCustomer.LastWagerDateTime = null;
+                }
+
+                _Db.Customers.Add(currentCustomer);
+                _Db.SaveChanges();
+            }
             return customer;
+        }
+
+        public bool IsValidCustomer(int customerId)
+        {
+            var isValidCustomer = _Db.Customers.Count(c => c.CustomerId == customerId) > 0;
+
+            return isValidCustomer;
         }
 
         public Wager SaveOrUpdateWager(Wager wager, bool isValid)
         {
-            _db.Wagers.Add(new Data.Wager());
-            _db.SaveChanges();
+            _Db.Wagers.Add(new Data.Wager());
+            _Db.SaveChanges();
             return wager;
         }
 
         public void UpdateCustomerLastWager(CustomerLastWager lastWager)
         {
-            var customer = _db.Customers.FirstOrDefault(c => c.CustomerId == lastWager.CustomerId);
+            var customer = _Db.Customers.FirstOrDefault(c => c.CustomerId == lastWager.CustomerId);
 
             if (customer != null)
             {
                 customer.LastWagerAmount = lastWager.LastWagerAmount;
                 customer.LastWagerDateTime = lastWager.LastWagerDateTime;
-                _db.SaveChanges();
+                _Db.SaveChanges();
             }
         }
     }

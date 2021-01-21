@@ -8,7 +8,7 @@
 	FirstDepositAmount DECIMAL(19,5) NULL,
 	LastWagerAmount DECIMAL(19,5) NULL,
 	LastWagerDateTime DATETIME NULL,
-	InserteDateTime DATETIME NOT NULL,
+	InsertedDateTime DATETIME NOT NULL,
 	LastUpdateDateTime DATETIME NULL,
 	CONSTRAINT PK_Customer_CustomerId PRIMARY KEY(CustomerId)
 )

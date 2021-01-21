@@ -28,7 +28,7 @@ namespace OsirisTest.Data.EntityConfigurations
                   .HasMaxLength(255)
                   .IsUnicode(false);
 
-            entity.Property(e => e.InserteDateTime).HasColumnType("datetime");
+            entity.Property(e => e.InsertedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.LastName)
                   .IsRequired()

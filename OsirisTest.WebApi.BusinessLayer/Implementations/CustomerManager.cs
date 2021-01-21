@@ -12,7 +12,7 @@ namespace OsirisTest.WebApi.BusinessLayer.Implementations
         {
             _WebDataAccessLayer = webAccessLayer;
         }
-        public async Task<bool> IsLockedCustomer(int customerId)
+        public async Task<Response> IsLockedCustomer(int customerId)
         {
             return await _WebDataAccessLayer.IsLockedCustomer(customerId);
         }

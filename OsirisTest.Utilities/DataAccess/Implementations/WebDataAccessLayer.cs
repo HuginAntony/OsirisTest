@@ -18,9 +18,9 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
             1,7,16,21,28,29,36,48,49,56,70,88,91,92,99
         };
 
-        public async Task<bool> IsLockedCustomer(int customerId)
+        public async Task<Response> IsLockedCustomer(int customerId)
         {
-            return await Task.FromResult(LockedCustomers.Contains(customerId));
+            return await Task.FromResult(new Response{ Result = LockedCustomers.Contains(customerId) });
         }
 
         public async Task<CustomerResponse> GetCustomerById(int customerId)

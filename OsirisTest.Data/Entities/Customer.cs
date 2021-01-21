@@ -20,7 +20,7 @@ namespace OsirisTest.Data
         public decimal? FirstDepositAmount { get; set; }
         public decimal? LastWagerAmount { get; set; }
         public DateTime? LastWagerDateTime { get; set; }
-        public DateTime InserteDateTime { get; set; }
+        public DateTime InsertedDateTime { get; set; }
         public DateTime? LastUpdateDateTime { get; set; }
 
         public virtual ICollection<Wager> Wagers { get; set; }
