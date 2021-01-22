@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +20,7 @@ namespace OsirisTest.Service.Consumer.Consumers
         private readonly IConsumerAccessLayer _ConsumerAccessLayer;
         private readonly IHttpClient _HttpClient;
         private readonly IMapper _Mapper;
+        private static List<Guid> _ProcessingWagers = new List<Guid>();
 
         public WagerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer consumerAccessLayer, IConfiguration configuration, 
             IHttpClient httpClient, IMapper mapper) 
@@ -34,7 +37,15 @@ namespace OsirisTest.Service.Consumer.Consumers
 
         protected override async void ProcessMessage(BaseMessage<Wager> message)
         {
-            //TODO: Ensure that you do not simultaneously process the same wager (This should not be the case with the WagerId being a random Guid but do cater for it either way)
+            if (_ProcessingWagers.Contains(message.Message.WagerId))
+            {
+                while (_ProcessingWagers.Contains(message.Message.WagerId))
+                {
+                    //Do nothing until the other thread is completed processing the same Wager
+                }
+            }
+
+            _ProcessingWagers.Add(message.Message.WagerId);
 
             var isValidCustomer = await _ConsumerAccessLayer.IsValidCustomer(message.Message.CustomerId);
 
@@ -49,6 +60,8 @@ namespace OsirisTest.Service.Consumer.Consumers
             var wager = await _ConsumerAccessLayer.SaveOrUpdateWager(message.Message, message.Message.IsValidWager());
 
             await UpdateLastWager(message, wager);
+
+            _ProcessingWagers.Remove(message.Message.WagerId);
         }
 
         private async Task UpdateLastWager(BaseMessage<Wager> message, Wager wager)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -7,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OsirisTest.Contracts;
 using OsirisTest.Contracts.RequestModels;
-using OsirisTest.Contracts.ResponseModels;
 using OsirisTest.Service.Consumer.Consumers.Base;
 using OsirisTest.Service.Consumer.Contracts;
 using OsirisTest.Utilities.DataAccess.DataContracts;
@@ -19,6 +19,7 @@ namespace OsirisTest.Service.Consumer.Consumers
     {
         private readonly IConsumerAccessLayer _ConsumerAccessLayer;
         private readonly IHttpClient _HttpClient;
+        private static List<int> _ProcessingCustomers = new List<int>();
 
         public CustomerConsumer(ILoggerFactory loggerFactory, IConsumerAccessLayer consumerAccessLayer, IConfiguration configuration, IHttpClient httpClient) 
             : base(loggerFactory, configuration)
@@ -33,11 +34,20 @@ namespace OsirisTest.Service.Consumer.Consumers
 
         protected override async void ProcessMessage(BaseMessage<Customer> message)
         {
-            //TODO: Ensure that you do not simultaneously process the same customer
+            if (_ProcessingCustomers.Contains(message.Message.CustomerId))
+            {
+                while (_ProcessingCustomers.Contains(message.Message.CustomerId))
+                {
+                    //Do nothing until the other thread is completed processing the same customer
+                }
+            }
 
+            _ProcessingCustomers.Add(message.Message.CustomerId);
             var customer = await _ConsumerAccessLayer.SaveOrUpdateCustomer(message.Message);
 
             await SendEmail(message, customer);
+
+            _ProcessingCustomers.Remove(message.Message.CustomerId);
         }
 
         private async Task SendEmail(BaseMessage<Customer> message, Customer customer)
@@ -46,7 +56,7 @@ namespace OsirisTest.Service.Consumer.Consumers
             var lastEmail = await _ConsumerAccessLayer.GetLastEmailDate(customer.CustomerId);
             var time = DateTime.Now - lastEmail;
 
-            if (time.Hours > 24)
+            if (time.TotalHours > 24)
             {
                 _ConsumerAccessLayer.UpdateLastEmailDate(customer.CustomerId);
 
@@ -68,7 +78,6 @@ namespace OsirisTest.Service.Consumer.Consumers
                     var response = await _HttpClient.Post<string>(request);
                 }
             }
-            
         }
     }
 }
