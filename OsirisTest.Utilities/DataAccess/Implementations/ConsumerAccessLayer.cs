@@ -57,14 +57,18 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
                 await db.Customers.AddAsync(currentCustomer);
                 await db.SaveChangesAsync();
             }
+            await db.DisposeAsync();
+
             return customer;
         }
 
         public async Task<bool> IsValidCustomer(int customerId)
         {
-            var _Db = new OsirisContext();
+            var db = new OsirisContext();
 
-            var isValidCustomer = await _Db.Customers.CountAsync(c => c.CustomerId == customerId) > 0;
+            var isValidCustomer = await db.Customers.CountAsync(c => c.CustomerId == customerId) > 0;
+
+            await db.DisposeAsync();
 
             return isValidCustomer;
         }
@@ -94,6 +98,8 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
                 await db.Wagers.AddAsync(currentWager);
                 await db.SaveChangesAsync();
             }
+            
+            await db.DisposeAsync();
 
             return wager;
         }
@@ -110,6 +116,7 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
                 customer.LastWagerDateTime = lastWager.LastWagerDateTime;
                 await db.SaveChangesAsync();
             }
+            await db.DisposeAsync();
         }
     }
 }
