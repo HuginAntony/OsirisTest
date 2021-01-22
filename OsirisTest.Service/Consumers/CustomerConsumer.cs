@@ -43,23 +43,32 @@ namespace OsirisTest.Service.Consumer.Consumers
         private async Task SendEmail(BaseMessage<Customer> message, Customer customer)
         {
             //CUSTOMER SHOULD NOT RECEIVE MORE THAN ONE MAIL EVERY 24 HOURS
-            if (customer.LastWagerDateTime != DateTime.MinValue && DateTime.Now > customer.LastWagerDateTime.AddDays(-3))
+            var lastEmail = await _ConsumerAccessLayer.GetLastEmailDate(customer.CustomerId);
+            var time = DateTime.Now - lastEmail;
+
+            if (time.Hours > 24)
             {
-                SendMailRequest body = new SendMailRequest
+                _ConsumerAccessLayer.UpdateLastEmailDate(customer.CustomerId);
+
+                if (customer.LastWagerDateTime != DateTime.MinValue && DateTime.Now > customer.LastWagerDateTime.AddDays(-3))
                 {
-                    EmailAddress = message.Message.EmailAddress,
-                    MailSubjectLine = "We have more deals for you",
-                    MailBody =
-                        $"Hi {message.Message.FirstName}.\r\nYour last wager was {message.Message.LastWagerAmount} on {message.Message.LastWagerDateTime}."
-                };
+                    SendMailRequest body = new SendMailRequest
+                    {
+                        EmailAddress = message.Message.EmailAddress,
+                        MailSubjectLine = "We have more deals for you",
+                        MailBody =
+                            $"Hi {message.Message.FirstName}.\r\nYour last wager was {message.Message.LastWagerAmount} on {message.Message.LastWagerDateTime}."
+                    };
 
-                var request = new HttpRequestMessage(HttpMethod.Post, "/v1/Communications/SendReminderEmail");
+                    var request = new HttpRequestMessage(HttpMethod.Post, "/v1/Communications/SendReminderEmail");
 
-                request.Content = new StringContent(JsonSerializer.Serialize(body));
-                request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    request.Content = new StringContent(JsonSerializer.Serialize(body));
+                    request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                var response = await _HttpClient.Post<string>(request);
+                    var response = await _HttpClient.Post<string>(request);
+                }
             }
+            
         }
     }
 }

@@ -36,6 +36,7 @@ namespace OsirisTest.Data.EntityConfigurations
                   .IsUnicode(false);
 
             entity.Property(e => e.LastUpdateDateTime).HasColumnType("datetime");
+            entity.Property(e => e.LastEmailDateTime).HasColumnType("datetime").HasDefaultValueSql("NULL");
 
             entity.Property(e => e.LastWagerAmount).HasColumnType("decimal(19, 5)");
 

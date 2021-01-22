@@ -118,5 +118,32 @@ namespace OsirisTest.Utilities.DataAccess.Implementations
             }
             await db.DisposeAsync();
         }
+
+        public async void UpdateLastEmailDate(int customerId)
+        {
+            var db = new OsirisContext();
+
+            var customer = await db.Customers.FirstOrDefaultAsync(c => c.CustomerId == customerId);
+            
+            if (customer != null)
+            {
+                customer.LastEmailDateTime = DateTime.Now;
+                await db.SaveChangesAsync();
+            }
+            await db.DisposeAsync();
+        }
+
+        public async Task<DateTime> GetLastEmailDate(int customerId)
+        {
+            var db = new OsirisContext();
+
+            var customer = await db.Customers.FirstOrDefaultAsync(c => c.CustomerId == customerId);
+            await db.DisposeAsync();
+
+            if (customer?.LastEmailDateTime != null) 
+                return (DateTime) customer.LastEmailDateTime;
+
+            return DateTime.MaxValue;
+        }
     }
 }

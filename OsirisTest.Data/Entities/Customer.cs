@@ -22,6 +22,7 @@ namespace OsirisTest.Data
         public DateTime? LastWagerDateTime { get; set; }
         public DateTime InsertedDateTime { get; set; }
         public DateTime? LastUpdateDateTime { get; set; }
+        public DateTime? LastEmailDateTime { get; set; }
 
         public virtual ICollection<Wager> Wagers { get; set; }
     }
